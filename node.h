@@ -14,7 +14,7 @@
  *        Node         : A class representing a Node
  *    Additionally, it will contain a few functions working on Node
  * Author
- *    <your names here>
+ *    Michael, James, Brayden
  ************************************************************************/
 
 #pragma once
@@ -36,31 +36,25 @@ public:
    //
    // Construct
    //
-   //
-   // Construct
+
+   // ------- Michael code to complete --------
    //
 
-   Node() 
-   { 
-      pNext = pPrev = this;
-   }
-   Node(const T& data) 
-   {
-      pNext = pPrev = this;
-   }
+   // Default constructor
+   Node() : data(), pNext(nullptr), pPrev(nullptr) {}
 
-   Node(T&& data) 
-   {
-      pNext = pPrev = this;
-   }
+   // Copy constructor (construct node from a value)
+   Node(const T& data) : data(data), pNext(nullptr), pPrev(nullptr) {}
+
+   // Move constructor (construct node from an r-value)
+   Node(T&& data) : data(std::move(data)), pNext(nullptr), pPrev(nullptr) {}
 
    //
    // Member variables
    //
-
-   T data;                 // user data
-   Node <T> * pNext;       // pointer to next node
-   Node <T> * pPrev;       // pointer to previous node
+   T data;
+   Node <T>* pNext;
+   Node <T>* pPrev;
 };
 
 /***********************************************
@@ -71,10 +65,30 @@ public:
  *   OUTPUT : return the new list
  *   COST   : O(n)
  **********************************************/
+ // ------- Michael code to complete --------
 template <class T>
-inline Node <T> * copy(const Node <T> * pSource) 
+inline Node <T>* copy(const Node <T>* pSource)
 {
-   return new Node<T>;
+   if (!pSource)
+       return nullptr;
+
+   // create the head
+   Node<T>* pHead = new Node<T>(pSource->data);
+   pHead->pPrev = nullptr;
+   pHead->pNext = nullptr;
+
+   // create the remainder
+   Node<T>* pDes = pHead;
+   for (const Node<T>* pSrc = pSource->pNext; pSrc != nullptr; pSrc = pSrc->pNext)
+   {
+       Node<T>* pNew = new Node<T>(pSrc->data);
+       pNew->pPrev = pDes;
+       pNew->pNext = nullptr;
+       pDes->pNext = pNew;
+       pDes = pNew;
+   }
+
+   return pHead;
 }
 
 /***********************************************
@@ -85,10 +99,11 @@ inline Node <T> * copy(const Node <T> * pSource)
  *   OUTPUT : return the new list
  *   COST   : O(n)
  **********************************************/
+ // ------- James code to complete --------
 template <class T>
-inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
+inline void assign(Node <T>*& pDestination, const Node <T>* pSource)
 {
-   
+
 }
 
 /***********************************************
@@ -96,10 +111,11 @@ inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
  * Swap the list from LHS to RHS
  *   COST   : O(1)
  **********************************************/
+ // ------- Michael code to complete --------
 template <class T>
-inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
+inline void swap(Node <T>*& pLHS, Node <T>*& pRHS)
 {
-   
+   std::swap(pLHS, pRHS);
 }
 
 /***********************************************
@@ -109,11 +125,11 @@ inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
  *   OUTPUT : the pointer to the parent node
  *   COST   : O(1)
  **********************************************/
+ // ------- Brayden code to complete --------
 template <class T>
-inline Node <T> * remove(const Node <T> * pRemove) 
+inline Node <T>* remove(const Node <T>* pRemove)
 {
-   
-   return new Node<T>;
+   return nullptr;
 }
 
 
@@ -128,12 +144,14 @@ inline Node <T> * remove(const Node <T> * pRemove)
  *   OUTPUT  : return the newly inserted item
  *   COST    : O(1)
  **********************************************/
+ // ------- Brayden code to complete --------
 template <class T>
-inline Node <T> * insert(Node <T> * pCurrent,
-                  const T & t,
-                  bool after = false)
+inline Node <T>* insert(Node <T>* pCurrent,
+   const T& t,
+   bool after = false)
 {
-   return new Node<T>();
+
+   return nullptr;
 }
 
 /******************************************************
@@ -144,11 +162,13 @@ inline Node <T> * insert(Node <T> * pCurrent,
  *  OUTPUT  : number of nodes
  *  COST    : O(n)
  ********************************************************/
+ // ------- James code to complete --------
 template <class T>
-inline size_t size(const Node <T> * pHead)
+inline size_t size(const Node <T>* pHead)
 {
-   return 99;
+   return 999;
 }
+
 
 /***********************************************
  * DISPLAY
@@ -158,8 +178,9 @@ inline size_t size(const Node <T> * pHead)
  *    OUTPUT : the data from the linked list on the screen
  *    COST   : O(n)
  **********************************************/
+ // ------- Brayden code to complete --------
 template <class T>
-inline std::ostream & operator << (std::ostream & out, const Node <T> * pHead)
+inline std::ostream& operator << (std::ostream& out, const Node <T>* pHead)
 {
    return out;
 }
@@ -171,10 +192,16 @@ inline std::ostream & operator << (std::ostream & out, const Node <T> * pHead)
  *   OUTPUT  : pHead set to NULL
  *   COST    : O(n)
  ****************************************************/
+ // ------- Michael code to complete --------
 template <class T>
-inline void clear(Node <T> * & pHead)
+inline void clear(Node <T>*& pHead)
 {
-   
+   while (pHead != nullptr)
+   {
+       Node<T>* pNext = pHead->pNext;
+       delete pHead;
+       pHead = pNext;
+   }
 }
 
 
