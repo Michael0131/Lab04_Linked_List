@@ -129,7 +129,7 @@ inline void assign(Node <T>*& pDestination, const Node <T>* pSource)
       }
    }
    // Delete
-   if (!pSrc && pDes){
+   else if (!pSrc && pDes){
       bool setToNull = false;
          if (pDes->pPrev)
             pDes->pPrev->pNext = nullptr;
