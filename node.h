@@ -103,7 +103,44 @@ inline Node <T>* copy(const Node <T>* pSource)
 template <class T>
 inline void assign(Node <T>*& pDestination, const Node <T>* pSource)
 {
+   // Initialize
+   const Node<T>* pSrc = pSource;
+   Node<T>* pDes = pDestination;
+   Node<T>* pTail = pDes;
+   // Copy
+   while (pSrc && pDes)
+   {
+      pDes->data = pSrc->data;
+      pTail = pDes;
+      pDes = pDes->pNext;
+      pSrc = pSrc->pNext;
+    
+   }
+   // Assign
+   if (pSrc)
+   {
+      pDes = pTail;
+      while (pSrc)
+      {
+         pDes = insert(pDes, pSrc->data, true);
+         if (!pDestination)
+            pDestination = pDes;
+         pSrc = pSrc->pNext;
+      }
+   }
+   // Delete
+   if (!pSrc && pDes){
+      bool setToNull = false;
+         if (pDes->pPrev)
+            pDes->pPrev->pNext = nullptr;
+         else
+            setToNull = true;
+            
+         clear(pDes);
 
+         if (setToNull)
+            pDestination = nullptr;
+   }
 }
 
 /***********************************************
@@ -166,7 +203,13 @@ inline Node <T>* insert(Node <T>* pCurrent,
 template <class T>
 inline size_t size(const Node <T>* pHead)
 {
-   return 999;
+   // Create a new count of size_t
+   size_t count = 0;
+
+   // Loop through the linked list and iterate
+   for (const Node <T> * p = pHead; p; p = p->pNext)
+      count++;
+   return count;
 }
 
 
