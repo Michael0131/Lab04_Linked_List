@@ -162,11 +162,31 @@ inline void swap(Node <T>*& pLHS, Node <T>*& pRHS)
  *   OUTPUT : the pointer to the parent node
  *   COST   : O(1)
  **********************************************/
- // ------- Brayden code to complete --------
+ // ------- Brayden --------
 template <class T>
 inline Node <T>* remove(const Node <T>* pRemove)
 {
-   return nullptr;
+   if (pRemove == nullptr)
+      return nullptr;
+
+   // Modify the previous and next node so they
+   // no longer refer to the node being removed
+   if (pRemove->pPrev)
+      pRemove->pPrev->pNext = pRemove->pNext;
+ 
+   if (pRemove->pNext)
+      pRemove->pNext->pPrev = pRemove->pPrev;
+
+   // Delete the node being removed
+   Node<T>* pReturn = pRemove->pNext;
+   if (pRemove->pPrev)
+      pReturn = pRemove->pPrev;
+   
+   else
+      pReturn = pRemove->pNext;
+   delete pRemove;
+
+   return pReturn;
 }
 
 
@@ -181,14 +201,47 @@ inline Node <T>* remove(const Node <T>* pRemove)
  *   OUTPUT  : return the newly inserted item
  *   COST    : O(1)
  **********************************************/
- // ------- Brayden code to complete --------
+ // ------- Brayden --------
 template <class T>
 inline Node <T>* insert(Node <T>* pCurrent,
    const T& t,
    bool after = false)
 {
+   // Create a new node for insertion
+   Node<T>* pNew = new Node<T>(t);
 
-   return nullptr;
+   // Before
+   if (pCurrent != nullptr && !after)
+   {
+      // Hook the new node up
+      pNew->pNext = pCurrent;
+      pNew->pPrev = pCurrent->pPrev;
+
+      // Hook the nodes in the destination 
+      // linked list up to the new node
+      pCurrent->pPrev = pNew;
+      if (pNew->pPrev)
+      {
+         pNew->pPrev->pNext = pNew;
+      }
+   }
+   // After
+   else if (pCurrent != nullptr && after)
+   {
+      // Hook the new node up
+      pNew->pNext = pCurrent->pNext;
+      pNew->pPrev = pCurrent;
+
+      // Hook the nodes in the destination 
+      // linked list up to the new node
+      pCurrent->pNext = pNew;
+      if (pNew->pNext)
+      {
+         pNew->pNext->pPrev = pNew;
+      }
+   }
+
+   return pNew;
 }
 
 /******************************************************
@@ -225,6 +278,12 @@ inline size_t size(const Node <T>* pHead)
 template <class T>
 inline std::ostream& operator << (std::ostream& out, const Node <T>* pHead)
 {
+   for (auto p = pHead; p != nullptr; p = p->pPrev)
+   {
+       out << p->data;
+       if (p->pPrev)
+           out << ' ';
+   }
    return out;
 }
 
